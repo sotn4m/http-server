@@ -6,7 +6,6 @@
 #include <chrono>
 #include <csignal>
 #include <iostream>
-#include <print>
 
 namespace net = boost::asio;
 
@@ -24,8 +23,8 @@ int main () {
                             router.request_handler ()};
 
     const auto bound = server.local_endpoint ();
-    std::println ("Listening on {}:{}", bound.address ().to_string (),
-                  bound.port ());
+    std::cout << "Listening on " << bound.address ().to_string () << ':'
+              << bound.port () << '\n';
 
     net::signal_set signals (io_context, SIGINT, SIGTERM);
     signals.async_wait (
@@ -42,7 +41,7 @@ int main () {
     server.start ();
     io_context.run ();
   } catch (const std::exception& exception) {
-    std::println (std::cerr, "{}", exception.what ());
+    std::cerr << exception.what () << '\n';
     return 1;
   }
 

@@ -2,6 +2,12 @@
 
 All notable changes to this project are documented here.
 
+## [Unreleased]
+
+### Fixed
+
+- Drop `<print>` / `std::println` in `Logging.h` and the minimal example so the library builds on GCC 13 and other C++23 toolchains without the C++23 formatting library
+
 ## [1.0.1] - 2026-05-23
 
 ### Changed

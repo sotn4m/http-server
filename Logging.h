@@ -2,7 +2,6 @@
 
 #include <functional>
 #include <iostream>
-#include <print>
 #include <string_view>
 
 namespace web {
@@ -27,7 +26,7 @@ using LogFn = std::function<void (LogLevel level, std::string_view message)>;
 [[nodiscard]] inline const LogFn& default_stderr_logger () {
   static const LogFn logger = [] (LogLevel level, std::string_view message) {
     auto& stream = level == LogLevel::Error ? std::cerr : std::cout;
-    std::println (stream, "[{}] {}", to_string (level), message);
+    stream << '[' << to_string (level) << "] " << message << '\n';
   };
   return logger;
 }

@@ -57,7 +57,6 @@ target_link_libraries(my_service PRIVATE HttpServer::http-server)
 #include <chrono>
 #include <csignal>
 #include <iostream>
-#include <print>
 
 int main() {
   boost::asio::io_context io;
