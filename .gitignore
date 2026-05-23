@@ -1,0 +1,19 @@
+# Build artifacts
+build/
+*.o
+*.obj
+*.exe
+*.out
+
+# CMake / compile database
+compile_commands.json
+
+# Editor / tooling
+.cache/
+.vscode/
+.idea/
+.cursor/
+
+# OS
+.DS_Store
+

@@ -1,0 +1,8 @@
+@PACKAGE_INIT@
+cmake_minimum_required(VERSION 3.24)
+
+include(CMakeFindDependencyMacro)
+find_dependency(Boost 1.81 REQUIRED CONFIG COMPONENTS headers)
+
+include("${CMAKE_CURRENT_LIST_DIR}/HttpServerTargets.cmake")
+check_required_components(HttpServer)
