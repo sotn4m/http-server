@@ -20,11 +20,12 @@ struct SessionState;
 /// (`tcp::resolver::resolve`), bind, and listen on the calling thread.
 ///
 /// Shutdown: `stop()` is idempotent and safe from any thread. It cancels the
-/// pending accept; no new connections are accepted afterward. Existing
-/// sessions are not closed by `stop()` (they run until the peer closes or
-/// timeouts/errors on the stream). Use `wait_for_sessions()` after `stop()` to
-/// block until active sessions finish or a timeout elapses. Calling `start()`
-/// after `stop()` has no effect until a new `HttpServer` is constructed.
+/// pending accept and closes the listen socket so the bound port is released.
+/// No new connections are accepted afterward. Existing sessions are not closed
+/// by `stop()` (they run until the peer closes or timeouts/errors on the
+/// stream). Use `wait_for_sessions()` after `stop()` to block until active
+/// sessions finish or a timeout elapses. Calling `start()` after `stop()` has
+/// no effect until a new `HttpServer` is constructed.
 class HttpServer {
  public:
   explicit HttpServer (net::io_context::executor_type executor,

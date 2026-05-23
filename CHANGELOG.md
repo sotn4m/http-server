@@ -2,6 +2,20 @@
 
 All notable changes to this project are documented here.
 
+## [1.0.1] - 2026-05-23
+
+### Changed
+
+- CMake library target renamed to `http-server` (`HttpServer::http-server`); install headers under `include/http-server/`
+- Documentation and examples use submodule path `third_party/http-server`
+
+### Fixed
+
+- Segfault on empty-body responses (e.g. redirects): `to_http_response()` no longer reads `RestResponse` after moving its body
+- CI install smoke test checks `include/http-server/` and `libhttp-server.a`
+- `HttpServer::stop()` closes the listen acceptor so the bound port is released promptly
+- `TestServer` shutdown stops the I/O thread before destroying the server (ephemeral listen port reusable)
+
 ## [0.8.0] - 2026-05-23
 
 ### Added

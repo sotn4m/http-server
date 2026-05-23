@@ -18,7 +18,7 @@ using namespace web::test;
 
 TEST_CASE ("max_active_sessions rejects excess connections with 503",
            "[admission]") {
-  ServerConfig config {};
+  ServerConfig config = test_listen_config ();
   config.max_active_sessions = 1;
   config.log_fn = null_logger ();
 

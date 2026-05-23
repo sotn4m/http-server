@@ -46,3 +46,5 @@ jobs:
         run: |
           cmake --install build --prefix "${{ runner.temp }}/install"
           test -f "${{ runner.temp }}/install/lib/cmake/HttpServer/HttpServerConfig.cmake"
+          test -f "${{ runner.temp }}/install/include/http-server/HttpServer.h"
+          test -f "${{ runner.temp }}/install/lib/libhttp-server.a"

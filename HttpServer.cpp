@@ -104,11 +104,19 @@ void HttpServer::stop () noexcept {
   }
 
   net::post (acceptor_.get_executor (), [this] {
-    try {
-      acceptor_.cancel ();
-    } catch (...) {
-      log_message (log_fn_, LogLevel::Error,
-                   "HttpServer: acceptor cancel failed");
+    boost::system::error_code error_code;
+    acceptor_.cancel (error_code);
+    if (error_code) {
+      log_message (log_fn_, LogLevel::Warn,
+                   std::format ("HttpServer: acceptor cancel failed: {}",
+                                error_code.message ()));
+    }
+    error_code.clear ();
+    acceptor_.close (error_code);
+    if (error_code) {
+      log_message (log_fn_, LogLevel::Warn,
+                   std::format ("HttpServer: acceptor close failed: {}",
+                                error_code.message ()));
     }
   });
 }

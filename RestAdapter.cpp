@@ -256,7 +256,7 @@ http::response<http::string_body> to_http_response (
   response.body () = std::move (rest_response).body ();
   if (has_body) {
     response.prepare_payload ();
-  } else if (rest_response.status () != 204) {
+  } else if (response.result () != http::status::no_content) {
     response.content_length (0);
   }
   return response;

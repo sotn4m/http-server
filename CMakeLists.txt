@@ -4,7 +4,7 @@ if(POLICY CMP0167)
   cmake_policy(SET CMP0167 NEW)
 endif()
 
-project(HttpServer VERSION 0.8.0 LANGUAGES CXX)
+project(HttpServer VERSION 1.0.1 LANGUAGES CXX)
 
 include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
@@ -42,7 +42,7 @@ else()
   )
 endif()
 
-add_library(http_server
+add_library(http-server
   HttpServer.cpp
   HttpSession.cpp
   RestAdapter.cpp
@@ -50,19 +50,19 @@ add_library(http_server
   RestTypes.cpp
 )
 
-add_library(HttpServer::http_server ALIAS http_server)
+add_library(HttpServer::http-server ALIAS http-server)
 
-target_compile_features(http_server PUBLIC cxx_std_23)
-target_link_libraries(http_server PUBLIC ${HTTP_SERVER_BOOST_TARGET})
+target_compile_features(http-server PUBLIC cxx_std_23)
+target_link_libraries(http-server PUBLIC ${HTTP_SERVER_BOOST_TARGET})
 
-target_compile_options(http_server PRIVATE
+target_compile_options(http-server PRIVATE
   $<$<COMPILE_LANG_AND_ID:CXX,Clang,GNU>:-Wall -Wextra -Wpedantic -Wshadow>
 )
 
-target_include_directories(http_server
+target_include_directories(http-server
   PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/http_server>
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/http-server>
 )
 
 set(HTTP_SERVER_PUBLIC_HEADERS
@@ -78,7 +78,7 @@ set(HTTP_SERVER_PUBLIC_HEADERS
   CorsConfig.h
 )
 
-set_target_properties(http_server PROPERTIES
+set_target_properties(http-server PROPERTIES
   VERSION ${PROJECT_VERSION}
   SOVERSION ${PROJECT_VERSION_MAJOR}
   CXX_EXTENSIONS OFF
@@ -94,19 +94,19 @@ if(HTTP_SERVER_BUILD_EXAMPLES)
   add_executable(minimal_server examples/minimal_server/main.cpp)
   target_compile_features(minimal_server PRIVATE cxx_std_23)
   set_target_properties(minimal_server PROPERTIES CXX_EXTENSIONS OFF)
-  target_link_libraries(minimal_server PRIVATE HttpServer::http_server)
+  target_link_libraries(minimal_server PRIVATE HttpServer::http-server)
 endif()
 
 if(NOT HTTP_SERVER_INSTALL)
   return()
 endif()
 
-install(TARGETS http_server
+install(TARGETS http-server
   EXPORT HttpServerTargets
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-  PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/http_server
+  PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/http-server
 )
 
 install(EXPORT HttpServerTargets

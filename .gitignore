@@ -13,6 +13,7 @@ compile_commands.json
 .vscode/
 .idea/
 .cursor/
+AGENTS.md
 
 # OS
 .DS_Store

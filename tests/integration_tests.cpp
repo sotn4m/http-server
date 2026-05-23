@@ -162,7 +162,7 @@ TEST_CASE ("stop cancels accept loop", "[integration]") {
 
 TEST_CASE ("wait_for_sessions returns after active requests finish",
            "[integration]") {
-  ServerConfig config {};
+  ServerConfig config = test_listen_config ();
   config.log_fn = null_logger ();
 
   std::mutex mutex;

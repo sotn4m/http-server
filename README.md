@@ -2,7 +2,7 @@
 
 Async HTTP/REST library (C++23, Boost.Asio/Beast) for backend services.
 
-**Version:** 0.8.0 — pin `v0.8.0` when using as a submodule.
+**Version:** 1.0.1 — pin `v1.0.1` (or your tag) when using as a submodule.
 
 ## Requirements
 
@@ -15,7 +15,7 @@ cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 cmake --build build -j
 ```
 
-Target: `HttpServer::http_server`.
+Target: `HttpServer::http-server`.
 
 With tests and example:
 
@@ -35,8 +35,8 @@ Quick link:
 set(HTTP_SERVER_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 set(HTTP_SERVER_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(HTTP_SERVER_INSTALL OFF CACHE BOOL "" FORCE)
-add_subdirectory(third_party/http_server)
-target_link_libraries(my_service PRIVATE HttpServer::http_server)
+add_subdirectory(third_party/http-server)
+target_link_libraries(my_service PRIVATE HttpServer::http-server)
 ```
 
 ## Install (optional)

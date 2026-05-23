@@ -2,7 +2,7 @@
 
 Reusable **CMake library** for async HTTP/1.1 and REST routing. Your service owns routes, JSON, auth, databases, and deployment.
 
-**Target:** `HttpServer::http_server`  
+**Target:** `HttpServer::http-server`  
 **Requires:** C++23, CMake 3.24+, Boost 1.81+ (`Boost::headers`)
 
 ---
@@ -10,9 +10,9 @@ Reusable **CMake library** for async HTTP/1.1 and REST routing. Your service own
 ## Pin a version
 
 ```bash
-cd third_party/http_server
+cd third_party/http-server
 git fetch --tags
-git checkout v0.8.0
+git checkout v1.0.1
 ```
 
 ---
@@ -22,7 +22,7 @@ git checkout v0.8.0
 ### 1. Add
 
 ```bash
-git submodule add <REPO_URL> third_party/http_server
+git submodule add <REPO_URL> third_party/http-server
 git submodule update --init --recursive
 ```
 
@@ -38,11 +38,11 @@ set(HTTP_SERVER_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 set(HTTP_SERVER_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(HTTP_SERVER_INSTALL OFF CACHE BOOL "" FORCE)
 
-add_subdirectory(third_party/http_server)
+add_subdirectory(third_party/http-server)
 
 add_executable(my_service src/main.cpp)
 target_compile_features(my_service PRIVATE cxx_std_23)
-target_link_libraries(my_service PRIVATE HttpServer::http_server)
+target_link_libraries(my_service PRIVATE HttpServer::http-server)
 ```
 
 ### 3. Minimal `main.cpp`
@@ -97,7 +97,7 @@ Reference: `examples/minimal_server/main.cpp`.
 ## Installed package
 
 ```bash
-cmake -S third_party/http_server -B build -DCMAKE_BUILD_TYPE=Release
+cmake -S third_party/http-server -B build -DCMAKE_BUILD_TYPE=Release
 cmake --build build -j
 cmake --install build --prefix "$HOME/.local"
 ```
@@ -107,7 +107,7 @@ App:
 ```cmake
 find_package(Boost 1.81 REQUIRED CONFIG COMPONENTS headers)
 find_package(HttpServer CONFIG REQUIRED)
-target_link_libraries(my_service PRIVATE HttpServer::http_server)
+target_link_libraries(my_service PRIVATE HttpServer::http-server)
 ```
 
 ```bash
