@@ -29,7 +29,12 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Install dependencies
-        run: sudo apt-get update && sudo apt-get install -y libboost-all-dev
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libboost-all-dev g++-13 libstdc++-13-dev
+          # sotn4m/json uses std::expected (C++23); point gcc/g++ and clang at libstdc++ 13.
+          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 100
+          sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-13 100
 
       - name: Configure
         run: |

@@ -10,6 +10,8 @@ include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
 include(FetchContent)
 
+set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 # Helps tools (clang-tidy, clangd) match the build (flags, includes).
@@ -34,8 +36,17 @@ FetchContent_Declare(
   GIT_REPOSITORY https://github.com/sotn4m/json.git
   GIT_TAG ac610c988e42ed5be0bfda4f1e90d0f9c1061d41
 )
-FetchContent_MakeAvailable(Json)
+# Vendor json sources into http-server only — do not add_subdirectory the json
+# project (its FetchContent target can miss the runner's libstdc++ for std::expected).
 FetchContent_GetProperties(Json)
+if(NOT json_POPULATED)
+  cmake_policy(PUSH)
+  if(POLICY CMP0169)
+    cmake_policy(SET CMP0169 OLD)
+  endif()
+  FetchContent_Populate(Json)
+  cmake_policy(POP)
+endif()
 
 set(HTTP_SERVER_BOOST_TARGET "")
 if(TARGET Boost::headers)

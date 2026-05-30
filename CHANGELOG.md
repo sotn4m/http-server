@@ -10,6 +10,8 @@ All notable changes to this project are documented here.
 
 ### Fixed
 
+- Fetch `sotn4m/json` with `FetchContent_Populate` only (no separate `json` target) so embedded sources build as C++23 with `std::expected`
+- CI installs GCC 13 / libstdc++ 13 so the pinned json dependency compiles on Ubuntu runners
 - Drop `<print>` / `std::println` in `Logging.h` and the minimal example so the library builds on GCC 13 and other C++23 toolchains without the C++23 formatting library
 
 ## [1.0.1] - 2026-05-23
