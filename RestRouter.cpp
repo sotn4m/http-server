@@ -4,6 +4,7 @@
 
 #include "Logging.h"
 
+#include <Json.h>
 #include <boost/beast/http.hpp>
 #include <format>
 #include <stdexcept>
@@ -47,6 +48,10 @@ bool is_cors_origin_allowed (std::string_view origin, const CorsConfig& cors) {
     }
   }
   return false;
+}
+
+std::string error_payload (std::string_view error_code) {
+  return json::serialize (json::object ({{"error", std::string {error_code}}}));
 }
 
 std::vector<std::string_view> split_path_view (std::string_view path) {
@@ -286,7 +291,7 @@ RequestHandler RestRouter::request_handler () const {
       if (!is_cors_origin_allowed ((*http_request)[http::field::origin],
                                    state->cors)) {
         complete (make_response (
-            RestResponse::json (403, R"({"error":"origin_not_allowed"})"),
+            RestResponse::json (403, error_payload ("origin_not_allowed")),
             *http_request, state->cors, base_request.request_id ()));
         return;
       }
@@ -303,7 +308,7 @@ RequestHandler RestRouter::request_handler () const {
 
     if (method == HttpMethod::UNKNOWN) {
       complete (make_response (
-          RestResponse::json (400, R"({"error":"unsupported_method"})"),
+          RestResponse::json (400, error_payload ("unsupported_method")),
           *http_request, state->cors, context.request_id));
       return;
     }
@@ -355,14 +360,14 @@ RequestHandler RestRouter::request_handler () const {
       log_message (logger, LogLevel::Error,
                    std::format ("REST handler threw: {}", exception.what ()));
       complete (make_response (
-          RestResponse::json (500, R"({"error":"internal_server_error"})"),
+          RestResponse::json (500, error_payload ("internal_server_error")),
           *http_request, state->cors, base_request.request_id ()));
     } catch (...) {
       const auto logger = resolve_log_fn (state->log_fn);
       log_message (logger, LogLevel::Error,
                    "REST handler threw an unknown exception");
       complete (make_response (
-          RestResponse::json (500, R"({"error":"internal_server_error"})"),
+          RestResponse::json (500, error_payload ("internal_server_error")),
           *http_request, state->cors, base_request.request_id ()));
     }
   };

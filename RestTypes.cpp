@@ -1,5 +1,7 @@
 #include "RestTypes.h"
 
+#include <Json.h>
+
 #include <cctype>
 #include <stdexcept>
 #include <string_view>
@@ -21,6 +23,10 @@ std::string to_lower_ascii (std::string_view input) {
         std::tolower (static_cast<unsigned char> (character))));
   }
   return output;
+}
+
+std::string error_payload (std::string_view error_code) {
+  return json::serialize (json::object ({{"error", std::string {error_code}}}));
 }
 
 }  // namespace
@@ -102,15 +108,15 @@ RestResponse RestResponse::ok_json (std::string body) {
 }
 
 RestResponse RestResponse::not_found () {
-  return json (404, R"({"error":"not_found"})");
+  return json (404, error_payload ("not_found"));
 }
 
 RestResponse RestResponse::method_not_allowed () {
-  return json (405, R"({"error":"method_not_allowed"})");
+  return json (405, error_payload ("method_not_allowed"));
 }
 
 RestResponse RestResponse::service_unavailable () {
-  return json (503, R"({"error":"service_unavailable"})");
+  return json (503, error_payload ("service_unavailable"));
 }
 
 RestResponse RestResponse::redirect (std::string location, bool permanent) {

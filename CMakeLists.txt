@@ -8,6 +8,7 @@ project(HttpServer VERSION 1.0.1 LANGUAGES CXX)
 
 include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
+include(FetchContent)
 
 set(CMAKE_CXX_EXTENSIONS OFF)
 
@@ -27,6 +28,14 @@ option(HTTP_SERVER_INSTALL
   ${HTTP_SERVER_TOPLEVEL})
 
 find_package(Boost 1.81 REQUIRED CONFIG COMPONENTS headers)
+
+FetchContent_Declare(
+  Json
+  GIT_REPOSITORY https://github.com/sotn4m/json.git
+  GIT_TAG ac610c988e42ed5be0bfda4f1e90d0f9c1061d41
+)
+FetchContent_MakeAvailable(Json)
+FetchContent_GetProperties(Json)
 
 set(HTTP_SERVER_BOOST_TARGET "")
 if(TARGET Boost::headers)
@@ -48,12 +57,18 @@ add_library(http-server
   RestAdapter.cpp
   RestRouter.cpp
   RestTypes.cpp
+  "${json_SOURCE_DIR}/lexer/Lexer.cpp"
+  "${json_SOURCE_DIR}/parser/Parser.cpp"
+  "${json_SOURCE_DIR}/serializer/Serializer.cpp"
 )
 
 add_library(HttpServer::http-server ALIAS http-server)
 
 target_compile_features(http-server PUBLIC cxx_std_23)
-target_link_libraries(http-server PUBLIC ${HTTP_SERVER_BOOST_TARGET})
+target_link_libraries(http-server
+  PUBLIC
+    ${HTTP_SERVER_BOOST_TARGET}
+)
 
 target_compile_options(http-server PRIVATE
   $<$<COMPILE_LANG_AND_ID:CXX,Clang,GNU>:-Wall -Wextra -Wpedantic -Wshadow>
@@ -63,6 +78,8 @@ target_include_directories(http-server
   PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/http-server>
+  PRIVATE
+    "${json_SOURCE_DIR}"
 )
 
 set(HTTP_SERVER_PUBLIC_HEADERS

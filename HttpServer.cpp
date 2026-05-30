@@ -1,5 +1,6 @@
 #include "HttpServer.h"
 
+#include <Json.h>
 #include <boost/asio/error.hpp>
 #include <boost/beast/core.hpp>
 #include <boost/beast/http.hpp>
@@ -16,6 +17,10 @@ namespace http = beast::http;
 
 constexpr int kMaxConsecutiveAcceptErrors = 8;
 
+std::string error_payload (std::string_view error_code) {
+  return json::serialize (json::object ({{"error", std::string {error_code}}}));
+}
+
 void reject_overloaded_connection (tcp::socket socket, const LogFn& log_fn) {
   boost::system::error_code error_code;
   beast::tcp_stream stream {std::move (socket)};
@@ -25,7 +30,7 @@ void reject_overloaded_connection (tcp::socket socket, const LogFn& log_fn) {
                                               11};
   response.set (http::field::content_type, "application/json; charset=utf-8");
   response.set (http::field::connection, "close");
-  response.body () = R"({"error":"service_unavailable"})";
+  response.body () = error_payload ("service_unavailable");
   response.prepare_payload ();
 
   http::write (stream, response, error_code);

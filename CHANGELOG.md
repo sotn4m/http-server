@@ -4,6 +4,10 @@ All notable changes to this project are documented here.
 
 ## [Unreleased]
 
+### Changed
+
+- Internal JSON error payloads are now serialized via `sotn4m/json` (private dependency) instead of hand-crafted string literals
+
 ### Fixed
 
 - Drop `<print>` / `std::println` in `Logging.h` and the minimal example so the library builds on GCC 13 and other C++23 toolchains without the C++23 formatting library
